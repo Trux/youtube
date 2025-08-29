@@ -8,11 +8,9 @@
 <style>
 body { font-family: Arial, sans-serif; max-width: 900px; margin: 2rem auto; background: #f9f9f9; color: #222; }
 h1 { text-align: center; color: #444; }
-nav { text-align: center; margin-bottom: 1rem; }
-button { font-size: 1.2rem; margin: 0 1rem; padding: 0.4rem 1rem; cursor: pointer; }
 ul { list-style: none; padding: 0; }
 li { background: #fff; margin-bottom: 1rem; padding: 1rem; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: flex; gap: 1rem; align-items: center; }
-.thumb { width: 120px; height: 90px; object-fit: cover; margin-right: 0; border-radius: 4px; }
+.thumb { width: 120px; height: 90px; object-fit: cover; border-radius: 4px; }
 a { text-decoration: none; font-weight: normal; }
 a:hover { text-decoration: underline; }
 .channel-name { color: #0073e6; font-weight: bold; }
@@ -20,43 +18,33 @@ a:hover { text-decoration: underline; }
 .video-title { color: #000; font-weight: normal; }
 .timestamp { color: #666; font-size: 0.9rem; margin-top: 0.3rem; }
 .new-video { background: #e6f7ff; }
+.date-header { text-align: center; font-size: 1.1rem; margin-bottom: 1rem; color: #333; }
 </style>
 </head>
 <body>
-<h1>Latest Videos <span id="current-date"></span></h1>
-<nav><button onclick="prevDay()">&lt;</button><button onclick="nextDay()">&gt;</button></nav>
+<div class="date-header">Latest update: 29/08/2025 12:59</div>
 <ul id="video-list"></ul>
 <script>
-const videos = [{"title": "Subscriber Durability Test", "channel": "WhistlinDiesel", "url": "https://www.youtube.com/watch?v=brhzI2ZpNkc", "timestamp": 1756257976, "duration": "1:00:11", "date": "2025-08-27"}, {"title": "WHY were they Not STOPPED?! Saurya Airlines Accident", "channel": "Mentour Pilot", "url": "https://www.youtube.com/watch?v=WzeQYxeQZOI", "timestamp": 1755961255, "duration": "47:22", "date": "2025-08-23"}, {"title": "Why the F-14 Was Built for a Weapon That Was Never Fired", "channel": "Not What You Think", "url": "https://www.youtube.com/watch?v=35uYXZFHRkc", "timestamp": 1755871206, "duration": "15:12", "date": "2025-08-22"}, {"title": "Le joueur qui TERRORISE Street Fighter depuis 28 ANS", "channel": "PolyHeart", "url": "https://www.youtube.com/watch?v=zVF5wfIZq70", "timestamp": 1753786273, "duration": "19:38", "date": "2025-07-29"}];
-const newVideoIds = ["https://www.youtube.com/watch?v=brhzI2ZpNkc", "https://www.youtube.com/watch?v=WzeQYxeQZOI", "https://www.youtube.com/watch?v=35uYXZFHRkc", "https://www.youtube.com/watch?v=zVF5wfIZq70"];
-const allDates = [...new Set(videos.map(v => v.date))].sort().reverse();
-let currentIndex = 0;
-
-function render() {
-  const currentDate = allDates[currentIndex] || "";
-  document.getElementById('current-date').textContent = currentDate ? `(${currentDate})` : "";
-  const list = document.getElementById('video-list');
-  list.innerHTML = '';
-  videos.filter(v => v.date === currentDate).forEach(v => {
-    const li = document.createElement('li');
-    if (newVideoIds.includes(v.url)) li.classList.add('new-video');
-    const vid = (new URL(v.url)).searchParams.get('v');
-    li.innerHTML = `
-      <img class="thumb" src="https://i.ytimg.com/vi/${vid}/hqdefault.jpg" alt="">
-      <div>
-        <a href="${v.url}" target="_blank" rel="noopener noreferrer">
-          <span class="channel-name">[${v.channel}]</span>
-          <span class="video-duration">(${v.duration || ""})</span>
-          <span class="video-title">${v.title}</span>
-        </a>
-        <div class="timestamp">Published: ${new Date((v.timestamp||0)*1000).toLocaleString()}</div>
-      </div>`;
-    list.appendChild(li);
-  });
-}
-function prevDay() { if (currentIndex < allDates.length - 1) { currentIndex++; render(); } }
-function nextDay() { if (currentIndex > 0) { currentIndex--; render(); } }
-render();
+const videos = [{"title": "Subscriber Durability Test", "channel": "WhistlinDiesel", "url": "https://www.youtube.com/watch?v=brhzI2ZpNkc", "timestamp": 1756257976, "duration": "1:00:11", "date": "27/08/2025 03:26"}, {"title": "WHY were they Not STOPPED?! Saurya Airlines Accident", "channel": "Mentour Pilot", "url": "https://www.youtube.com/watch?v=WzeQYxeQZOI", "timestamp": 1755961255, "duration": "47:22", "date": "23/08/2025 17:00"}, {"title": "Why the F-14 Was Built for a Weapon That Was Never Fired", "channel": "Not What You Think", "url": "https://www.youtube.com/watch?v=35uYXZFHRkc", "timestamp": 1755871206, "duration": "15:12", "date": "22/08/2025 16:00"}, {"title": "Le joueur qui TERRORISE Street Fighter depuis 28 ANS", "channel": "PolyHeart", "url": "https://www.youtube.com/watch?v=zVF5wfIZq70", "timestamp": 1753786273, "duration": "19:38", "date": "29/07/2025 12:51"}];
+const newVideoIds = [];
+const list = document.getElementById('video-list');
+list.innerHTML = '';
+videos.forEach(v => {
+  const li = document.createElement('li');
+  if (newVideoIds.includes(v.url)) li.classList.add('new-video');
+  const vid = (new URL(v.url)).searchParams.get('v');
+  li.innerHTML = `
+    <img class="thumb" src="https://i.ytimg.com/vi/${vid}/hqdefault.jpg" alt="">
+    <div>
+      <a href="${v.url}" target="_blank" rel="noopener noreferrer">
+        <span class="channel-name">[${v.channel}]</span>
+        <span class="video-duration">(${v.duration || ""})</span>
+        <span class="video-title">${v.title}</span>
+      </a>
+      <div class="timestamp">Published: ${v.date}</div>
+    </div>`;
+  list.appendChild(li);
+});
 </script>
 </body>
 </html>
